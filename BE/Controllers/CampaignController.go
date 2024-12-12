@@ -1,10 +1,13 @@
 package Controllers
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 	"wan-api-kol-event/Const"
+	"wan-api-kol-event/Initializers"
 	"wan-api-kol-event/Logic"
+	"wan-api-kol-event/Models"
 	"wan-api-kol-event/ViewModels"
 
 	"github.com/gin-gonic/gin"
@@ -61,4 +64,68 @@ func GetKolsController(context *gin.Context) {
 	KolsVM.KOL = kols
 	KolsVM.TotalCount = int64(len(kols))
 	context.JSON(http.StatusOK, KolsVM)
+}
+
+func GenerateDummyData(context *gin.Context) {
+	// Get the count from the request body (as a query parameter or in the body)
+	count := context.DefaultQuery("count", "10") // Default to 10 if not provided
+
+	// Convert the count to integer
+	countInt, err := strconv.Atoi(count)
+	if err != nil || countInt <= 0 {
+		context.JSON(http.StatusBadRequest, gin.H{"error": "Invalid count"})
+		return
+	}
+
+	// Generate dummy data based on the count
+	dummyData := Logic.GenerateDummyData(countInt)
+
+	// Prepare a slice for the Kol model to be inserted into the database
+	var kolModels []Models.Kol
+	for _, kol := range dummyData {
+		kolModel := Models.Kol{
+			KolID:                kol.KolID,
+			UserProfileID:        kol.UserProfileID,
+			Language:             kol.Language,
+			Education:            kol.Education,
+			ExpectedSalary:       kol.ExpectedSalary,
+			ExpectedSalaryEnable: kol.ExpectedSalaryEnable,
+			ChannelSettingTypeID: kol.ChannelSettingTypeID,
+			IDFrontURL:           kol.IDFrontURL,
+			IDBackURL:            kol.IDBackURL,
+			PortraitURL:          kol.PortraitURL,
+			RewardID:             kol.RewardID,
+			PaymentMethodID:      kol.PaymentMethodID,
+			TestimonialsID:       kol.TestimonialsID,
+			VerificationStatus:   kol.VerificationStatus,
+			Enabled:              kol.Enabled,
+			ActiveDate:           kol.ActiveDate,
+			Active:               kol.Active,
+			CreatedBy:            kol.CreatedBy,
+			CreatedDate:          kol.CreatedDate,
+			ModifiedBy:           kol.ModifiedBy,
+			ModifiedDate:         kol.ModifiedDate,
+			IsRemove:             kol.IsRemove,
+			IsOnBoarding:         kol.IsOnBoarding,
+			Code:                 kol.Code,
+			PortraitRightURL:     kol.PortraitRightURL,
+			PortraitLeftURL:      kol.PortraitLeftURL,
+			LivenessStatus:       kol.LivenessStatus,
+		}
+		// Append kolModel to the slice
+		kolModels = append(kolModels, kolModel)
+	}
+
+	// Insert the data into the database in a single batch (bulk insert)
+	if err := Initializers.DB.Create(&kolModels).Error; err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"error": fmt.Sprintf("Failed to insert data into the database: %v", err)})
+		return
+	}
+
+	// Return success response
+	context.JSON(http.StatusOK, gin.H{
+		"result":  "Success",
+		"message": fmt.Sprintf("%d dummy data inserted successfully", countInt),
+		"data":    dummyData,
+	})
 }

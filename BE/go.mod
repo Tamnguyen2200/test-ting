@@ -1,6 +1,8 @@
 module wan-api-kol-event
 
-go 1.21.0
+go 1.22.0
+
+toolchain go1.23.4
 
 require (
 	github.com/gin-gonic/gin v1.9.1
@@ -38,6 +40,7 @@ require (
 	github.com/ugorji/go/codec v1.2.11 // indirect
 	golang.org/x/arch v0.3.0 // indirect
 	golang.org/x/crypto v0.9.0 // indirect
+	golang.org/x/exp v0.0.0-20241210194714-1829a127f884
 	golang.org/x/net v0.10.0 // indirect
 	golang.org/x/sys v0.8.0 // indirect
 	google.golang.org/protobuf v1.30.0 // indirect
