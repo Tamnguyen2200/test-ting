@@ -3,9 +3,98 @@
     This is the CSS file for the page component. 
     It contains the styles for the header of the page.
 */
-.header { 
-    background-color: #333;
-    color: white;
-    padding: 1em;
+/* Style for the container */
+/* Container for the table */
+*{
+    margin: 0;
+    padding: 0;
+}
+.Container {
+    padding: 20px;
+    max-width: 100%;
+    overflow-x: auto;
+    box-sizing: border-box;
+    background-color: #023170;
+  }
+  
+  /* Table styles */
+  .table {
+    display: block;
+    overflow: overlay;
+    height: calc(100vh - 110px);
+    background-color: #023170;
+    color: #fff;
+    border-spacing: 0 10px;
+    border: 2px solid #fff;
+  }
+  
+  /* Table cell styling */
+  .table th,
+  .table td {
+    padding: 8px; /* Reduces padding to fit the content better */
     text-align: center;
+    word-wrap: break-word; /* Ensures long text wraps inside the cell */
+    overflow: hidden; /* Prevents overflow outside the cell */
+  }
+
+  thead{
+    border: 1px solid #fff;
+  }
+
+  tbody{
+    background-color: #fff;
+    color: #000;
+  }
+  
+  /* Optional: Styling for pagination */
+  .pagination {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .pagination button {
+    padding: 5px 10px;
+    margin: 0 5px;
+  }
+  
+  .pagination button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .pagination button.active {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
+  /* Loading spinner */
+.loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+}
+  
+.spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 2s linear infinite;
+}
+  
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.items-per-page{
+    color: #fff;
+    display: flex;
+    flex-direction: row;
+    column-gap: 10px;
+    align-items: center;
+    padding-left: 5px;
 }
